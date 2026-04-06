@@ -11,63 +11,61 @@
 */
 
 using System.Security.Cryptography;
- //Conta corrente 
- 
-int numeroIdentificacao = RandomNumberGenerator.GetInt32(1, 101);
-string titular = "Iago";
-decimal saldo = 1000;
-decimal limiteDebito  = 1200;
 
-while(true)
+class Program
 {
-    Console.Clear();
-    System.Console.WriteLine("-----------------------------------");
-    System.Console.WriteLine($"Conta Corrente de {titular}");
-    System.Console.WriteLine("-----------------------------------");
-    System.Console.WriteLine("1 - Saque\n2 - Depósito\n3 - Consulta de saldo\n4 - Sair");
-    string opcaoMenu = Console.ReadLine()?.ToUpper();
+    static void Main (string[] args)
+    {       
+        ContaCorrente contaUm = new ContaCorrente();
+        //conta corrente 1
+        contaUm.numeroIdentificacao = RandomNumberGenerator.GetInt32(1, 101);
+        contaUm.titular = "Iago";
+        contaUm.saldo = 1000;
+        contaUm.limiteDebito = 1200;
 
-    if (opcaoMenu == "S")
-        break;
+        //conta corrente 2
+        ContaCorrente ContaDois = new ContaCorrente();
+        ContaDois.numeroIdentificacao = RandomNumberGenerator.GetInt32(1, 101);
+        ContaDois.titular = "Yuri";
+        ContaDois.saldo = 12000;
+        ContaDois.limiteDebito = 6000;
 
-    switch (opcaoMenu)
-    {
-        case "1":
-            System.Console.Write("Digite o valor que deseja sacar (R$): ");
-            decimal valorSaque = Convert.ToDecimal(Console.ReadLine());
+    while(true)
+    {   
+        //Conta corrente 
+        Console.Clear();
+        System.Console.WriteLine("-----------------------------------");
+        System.Console.WriteLine($"Conta Corrente de {contaUm.titular} - {contaUm.numeroIdentificacao}");
+        System.Console.WriteLine("-----------------------------------");
+        System.Console.WriteLine("1 - Saque\n2 - Depósito\n3 - Transferir\n4 - Consulta de saldo\n5 - Sair");
+        string opcaoMenu = Console.ReadLine()?.ToUpper();
 
-            if (saldo <= limiteDebito)
+        if (opcaoMenu == "S")
+            break;
+
+            switch (opcaoMenu)
             {
-                System.Console.WriteLine("O valor do limite do débito ja foi ultrapassado!");
-                Console.ReadLine();
+                case "1":
+                    contaUm.Sacar();
+                break;
+
+                case "2": 
+                    contaUm.Despositar();
+                break;
+
+                case "3":
+                    contaUm.TransferirPara(ContaDois);
+                break;
+
+                case "4":
+                    contaUm.ObterSaldo();
+                break;
+
+                default:
+                System.Console.WriteLine("Selecione uma opção válida!");
                 return;
             }
-            else
-            {
-                saldo -= valorSaque;  
-                System.Console.WriteLine("O valor foi sacado com sucesso!");  
-                Console.ReadLine();       
-            }
-
-        break;
-
-        case "2":
-            System.Console.Write("Digite o valor que deseja depositar (R$): ");
-            decimal valorDeposito = Convert.ToDecimal(Console.ReadLine());
-
-            saldo += valorDeposito;
-            System.Console.WriteLine("O valor foi depositado com sucesso!");  
-            Console.ReadLine();   
-
-        break;
-
-        case "3":
-            System.Console.Write($"O valor do saldo da conta é de (R$) é {saldo}");
-            Console.ReadLine();
-        break;
-
-        case "4":
-            System.Console.Write("");
-        break;
+        }
     }
 }
+
