@@ -14,52 +14,41 @@ using System.Security.Cryptography;
 
 class ContaCorrente
 {
-    public int numeroIdentificacao = RandomNumberGenerator.GetInt32(1, 101);
+    public int numeroIdentificacao;
     public string titular;
     public decimal saldo;
     public decimal limiteDebito;
 
-    public void Sacar()
+    public bool Sacar(decimal valorSaque)
     {
-        System.Console.Write("Digite o valor que deseja sacar (R$): ");
-        decimal valorSaque = Convert.ToDecimal(Console.ReadLine());
+        if (valorSaque > saldo + limiteDebito)
+            return false;
 
-        if (saldo <= limiteDebito)
-        {
-            System.Console.WriteLine("O valor do limite do débito ja foi ultrapassado!");
-            Console.ReadLine();
-        }
-        else
-        {
-            saldo -= valorSaque;  
-            System.Console.WriteLine("O valor foi sacado com sucesso!");  
-            Console.ReadLine();       
-        }     
+        saldo -= valorSaque;
+
+        return true;
     }
-    public void Despositar()
-    {
-        System.Console.Write("Digite o valor que deseja depositar (R$): ");
-        decimal valorDeposito = Convert.ToDecimal(Console.ReadLine());
 
+    public void Depositar(decimal valorDeposito)
+    {
         saldo += valorDeposito;
-        System.Console.WriteLine("O valor foi depositado com sucesso!");  
-        Console.ReadLine();          
     }
-    public void TransferirPara(ContaCorrente contaDestino)
+
+    public bool TransferirPara(ContaCorrente contaDestino, decimal valorTransferencia)
     {
-        System.Console.Write($"Digite o valor que deseja transferir (R$):");
-        decimal valorTranferencia = Convert.ToDecimal(Console.ReadLine());
+        bool conseguiuSacar = this.Sacar(valorTransferencia);
 
-        saldo -= valorTranferencia;
-        contaDestino.saldo += valorTranferencia; 
+        if (!conseguiuSacar)
+            return false;
 
-        System.Console.WriteLine($"O valor de R${valorTranferencia} foi tranferido com sucesso!");
-        Console.ReadLine();     
+        contaDestino.Depositar(valorTransferencia);
+
+        return true;
     }
-    public void ObterSaldo()
+
+    public decimal ObterSaldo()
     {
-        System.Console.Write($"O valor do saldo é R${saldo}.");
-        Console.ReadLine();        
+        return saldo;
     }
 }
 
