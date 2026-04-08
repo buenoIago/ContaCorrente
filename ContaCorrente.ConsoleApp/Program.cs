@@ -34,24 +34,32 @@ class Program
         TelaPrincipal tela = new TelaPrincipal();
         ContaCorrente contaAcessada = contaUm;
 
-        while (true)
-        {
+        while(true)
+        { 
+
             string? opcaoMenu = tela.ApresentarOpcoesMenu(contaAcessada);
 
-            if (opcaoMenu == "S")
-                break;
+            switch (opcaoMenu)
+            {
+                case "S":
+                return;
 
-            if (opcaoMenu == "1")
+                case "1":
                 tela.ApresentarOperacaoSaque(contaAcessada);
+                continue;
 
-            else if (opcaoMenu == "2")
+                case "2":
                 tela.ApresentarOperacaoDeposito(contaAcessada);
+                continue;
 
-            else if (opcaoMenu == "3")
+                case "3":
                 tela.ApresentarOperacaoTransferencia(contaAcessada, contaDestino: ContaDois);
+                continue;
 
-            else if (opcaoMenu == "4")
+                case "4":
                 tela.ApresentarOperacaoObterSaldo(contaAcessada);
+                continue;
+            }
         }
     }
 }
